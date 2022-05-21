@@ -57,8 +57,13 @@ class ElasticSearchJob implements ShouldQueue
     private function find($id)
     {
         $client = ClientBuilder::create()->build();
+        $check_exits = $client->indices()->exists(['index' => CGlobal::INDEX_ELASTIC_POST]);
+        if (!$check_exits) {
+            return 0;
+        }
         $params = [
             'index' => CGlobal::INDEX_ELASTIC_POST,
+            'type' => CGlobal::INDEX_ELASTIC_POST,
             'body' => [
                 'query' => [
                     'bool' => [
