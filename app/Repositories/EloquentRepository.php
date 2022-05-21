@@ -152,13 +152,8 @@ abstract class EloquentRepository implements RepositoryInterface
             }
         }
 
-        if (!empty($conds['order'])) {
-            foreach ($conds['order'] as $key => $value) {
-                $query = $query->orderBy($key, $value);
-            }
-        } else {
-            $query = $query->orderBy('created_at', 'desc');
-        }
+        //sắp xếp
+        $query = $query->orderBy($conds['order_by'] ?? 'created_at', $conds['sort'] ?? 'desc');
 
         return $query;
     }
