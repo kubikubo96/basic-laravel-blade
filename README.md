@@ -8,3 +8,6 @@
 
 #### **-Branch: _`elasticsearch`_**
 - Task elasticsearch and queue
+#### **-Branch: _`webhook-endpoint-casso`_**
+- Viết 1 webhook endpoint để xử lý sử kiện webhook xử lý thanh toán auto của ngân hàng,
+sử dụng casso(developer.casso.vn)
