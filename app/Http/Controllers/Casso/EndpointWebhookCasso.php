@@ -2,142 +2,103 @@
 
 namespace App\Http\Controllers\Casso;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\BillCassoLog;
+use App\Models\Order;
+use App\Repositories\BillCassoLogRepository;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class EndpointWebhookCasso extends Controller
 {
-    //GIÁ TIỀN TỔNG CỘNG CỦA ĐƠN HÀNG GIẢ ĐỊNH.
-    const ORDER_MONEY = 100000;
-
-    //Số tiền chuyển thiếu tối đa mà hệ thống vẫn chấp nhận để xác nhận đã thanh toán
-    const ACCEPTABLE_DIFFERENCE = 10000;
-
-    //Tiền tố điền trước mã đơn hàng để tạo mã cho khách hàng chuyển tiền
-    //Không phân biệt hoa thường  : DH123, dh123, Dh123, dH123 đều dc.
-    const MEMO_PREFIX = 'thu';
-
-    //Key bảo mật đã cấu hình bên Casso để chứng thực request
     const API_KEY = 'elcom-payment';
 
     //Danh sách id đã xử lý trước đây
     const ID_SEND = [4, 5, 6, 7, 8, 9];
+    public $buillCassoLogRepo;
+
+    public function __construct(BillCassoLogRepository $buillCassoLogRepo)
+    {
+        $this->buillCassoLogRepo = $buillCassoLogRepo;
+    }
 
     function paymentHandler(Request $request): JsonResponse
     {
         $response = $request->all();
-        $headers = $this->getHeader();
-        Log::info('data-payment', $response);
-        Log::info('data-header', $headers);
+        $header = Helper::getHeader();
+        Log::info('payment:', $response);
+        Log::info('header:', $header);
 
-        if (!isset($headers['Secure-Token']) || $headers['Secure-Token'] != self::API_KEY) {
-            Log::info('Error: Thiếu Secure Token hoặc secure token không khớp', [$headers, $response]);
+        $secure_token = $header['Secure-Token'] ?? $header['secure-token'] ?? null;
+        if ($secure_token != self::API_KEY) {
+            Log::info('Error: Thiếu secure token hoặc secure token không khớp', $header);
             die();
         }
         if (empty($response) || empty($response['data'])) {
-            return response()->json(['success' => false, 'message' => 'Có lỗi xay ra ở phía Casso, Yc gửi lại webhook']);
+            Log::info('Error: Data rỗng', $response);
+            die();
         }
         if ($response['error']) {
-            return response()->json(['success' => false, 'message' => 'Có lỗi xay ra ở phía Casso, Yc gửi lại webhook']);
+            Log::info('Error: Có lỗi xay ra ở phía Casso', $response);
+            die();
         }
 
         $data = $response['data'];
-        foreach ($data as $transaction) {
-            if (!isset($transaction['id'])) {
-                Log::info('Error: Id không tồn tại', $transaction);
-                continue;
-            }
-            if (in_array($transaction['id'], self::ID_SEND)) {
-                Log::info('Error: Id đã được xử lý trước đây', $transaction);
-                continue;
-            }
+        $params = [];
+        foreach ($data as $key => $item) {
+            $parse_desc = Helper::parseBillMessage($item['description']);
+            $order_code = $parse_desc['order_code'];
+            $customer_phone = $parse_desc['phone'];
 
-            $des = $transaction['description'];
-            $order_id = $this->parseOrderId($des);
+            $params[$key]['id_bill'] = (int)$item['id'];
+            $params[$key]['tid'] = $item['tid'];
+            $params[$key]['description'] = $item['description'];
+            $params[$key]['amount'] = (int)$item['amount'];
+            $params[$key]['cusum_balance'] = (int)$item['cusum_balance'];
+            $params[$key]['when'] = $item['when'];
+            $params[$key]['bank_sub_acc_id'] = $item['bank_sub_acc_id'];
+            $params[$key]['order_code'] = $order_code;
+            $params[$key]['customer_phone'] = $customer_phone;
+            $params[$key]['virtual_account'] = $item['virtualAccount'] ?? null;
+            $params[$key]['virtual_account_name'] = $item['virtualAccountName']  ?? null;
+            $params[$key]['corresponsive_name'] = $item['corresponsiveName'] ?? null;
+            $params[$key]['corresponsive_account'] = $item['corresponsiveAccount'] ?? null;
+            $params[$key]['corresponsive_bank_id'] = $item['corresponsiveBankId'] ?? null;
+            $params[$key]['corresponsive_bank_name'] = $item['corresponsiveBankName'] ?? null;
+            $params[$key]['created_at'] = $params[$key]['updated_at'] = Carbon::now();
 
-            if (is_null($order_id)) {
-                Log::info('Error: Không nhận dạng được order_id từ nội dung chuyển tiền: ', $transaction->description);
-                continue;
-            }
-
-            $paid = $transaction['amount'];
-            $order_note = "Casso thông báo nhận ".number_format($paid)." VND".". nội dung: ".$des.". chuyển vào "."STK ".$transaction['bank_sub_acc_id'];
-            $ACCEPTABLE_DIFFERENCE = abs(self::ACCEPTABLE_DIFFERENCE);
-
-            if ($paid < self::ORDER_MONEY - $ACCEPTABLE_DIFFERENCE) {
-                echo($order_note . '. Trạng thái đơn hàng đã được chuyển từ Tạm giữ sang Thanh toán thiếu.');
-
-            } else if ($paid <= self::ORDER_MONEY + $ACCEPTABLE_DIFFERENCE) {
-                // $order->payment_complete();//
-                // wc_reduce_stock_levels($order_id);
-                // $order->update_status('paid', $order_note); // order note is optional, if you want to  add a note to order
-                echo($order_note . '. Trạng thái đơn hàng đã được chuyển từ Tạm giữ sang Đã thanh toán.');
-
+            $bill_log = $this->buillCassoLogRepo->queryNor(['id_bill' => (int)$item['id']])->first();
+            if ($bill_log) {
+                //order bị trùng lặp, do đã xử lý trước đây
+                $params[$key]['status'] = BillCassoLog::STATUS_DUPLICATE;
             } else {
-                echo($order_note . '. Trạng thái đơn hàng đã được chuyển từ Tạm giữ sang Thanh toán dư.');
-                // $order->payment_complete();
-                // wc_reduce_stock_levels($order_id);//final
-                // $order->update_status('overpaid', $order_note); // order note is optional, if you want to  add a note to order
-
-            }
-        }
-        echo "<div>Xử lý hoàn tất</div>";
-        die();
-    }
-
-    function parseOrderId($des)
-    {
-        return self::MEMO_PREFIX;
-        $re = '/' . self::MEMO_PREFIX . '\d+/mi';
-        preg_match_all($re, $des, $matches, PREG_SET_ORDER);
-
-        if (count($matches) == 0)
-            return null;
-        // Print the entire match result
-        $orderCode = $matches[0][0];
-
-        $prefixLength = strlen(self::MEMO_PREFIX);
-
-        $orderId = intval(substr($orderCode, $prefixLength));
-
-        return $orderId;
-    }
-
-    function getHeader(): array
-    {
-        $headers = array();
-
-        $copy_server = array(
-            'CONTENT_TYPE' => 'Content-Type',
-            'CONTENT_LENGTH' => 'Content-Length',
-            'CONTENT_MD5' => 'Content-Md5',
-        );
-
-        foreach ($_SERVER as $key => $value) {
-            if (substr($key, 0, 5) === 'HTTP_') {
-                $key = substr($key, 5);
-                if (!isset($copy_server[$key]) || !isset($_SERVER[$key])) {
-                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
-                    $headers[$key] = $value;
+                $order = $this->orderRepository->getByCode($order_code);
+                if(!$order) {
+                    //không tìm thấy order
+                    $params[$key]['status'] = BillCassoLog::STATUS_NO_ORDER;
+                } else {
+                    $order_money = abs($order['amount']);
+                    $paid = $item['amount'];
+                    if($paid < $order_money) {
+                        //thanh toán bị thiếu
+                        $params[$key]['status'] = BillCassoLog::STATUS_LACK;
+                    } else {
+                        //thanh toán thành công
+                        $params[$key]['status'] = BillCassoLog::STATUS_SUCCESS;
+                        $this->orderRepository->update(['status' => Order::STATUS_PAID]);
+                    }
                 }
-            } elseif (isset($copy_server[$key])) {
-                $headers[$copy_server[$key]] = $value;
+            }
+
+            try {
+                $this->buillCassoLogRepo->create($params);
+            } catch (Exception $e) {
+                Log::info('Error khi lưu bills log: '. $e->getMessage(), $response);
             }
         }
-
-        if (!isset($headers['Authorization'])) {
-            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-                $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-            } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
-                $basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
-                $headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
-            } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-                $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
-            }
-        }
-
-        return $headers;
     }
 }
