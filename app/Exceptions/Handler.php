@@ -2,9 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Services\Debug\TelegramService;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable; // add this line
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -35,9 +36,16 @@ class Handler extends ExceptionHandler
      *
      * @throws \Exception
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $e)
     {
-        parent::report($exception);
+        $html = '<b>[Lỗi] : </b><code>' . $e->getMessage() . '</code>';
+        $html .= '<b>[File] : </b><code>' . $e->getFile() . '</code>';
+        $html .= '<b>[Line] : </b><code>' . $e->getLine() . '</code>';
+        $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
+        $html .= '<b>[URL] : </b><a href="'. url()->full() .'">' . url()->full() . '</a>';
+        TelegramService::sendMessage($html);
+
+        parent::report($e);
     }
 
     /**

@@ -30,20 +30,20 @@ class EndpointWebhookCasso extends Controller
     {
         $response = $request->all();
         $header = Helper::getHeader();
-        Log::info('payment:', $response);
-        Log::info('header:', $header);
+        Log::error('payment:', $response);
+        Log::error('header:', $header);
 
         $secure_token = $header['Secure-Token'] ?? $header['secure-token'] ?? null;
         if ($secure_token != self::API_KEY) {
-            Log::info('Error: Thiếu secure token hoặc secure token không khớp', $header);
+            Log::error('Error: Thiếu secure token hoặc secure token không khớp', $header);
             die();
         }
         if (empty($response) || empty($response['data'])) {
-            Log::info('Error: Data rỗng', $response);
+            Log::error('Error: Data rỗng', $response);
             die();
         }
         if ($response['error']) {
-            Log::info('Error: Có lỗi xay ra ở phía Casso', $response);
+            Log::error('Error: Có lỗi xay ra ở phía Casso', $response);
             die();
         }
 
@@ -97,7 +97,7 @@ class EndpointWebhookCasso extends Controller
             try {
                 $this->buillCassoLogRepo->create($params);
             } catch (Exception $e) {
-                Log::info('Error khi lưu bills log: '. $e->getMessage(), $response);
+                Log::error('Error khi lưu bills log: '. $e->getMessage(), $response);
             }
         }
     }
