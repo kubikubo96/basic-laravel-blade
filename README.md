@@ -12,4 +12,4 @@
 - Viết 1 webhook endpoint để xử lý sử kiện webhook xử lý thanh toán auto của ngân hàng,
 sử dụng casso(developer.casso.vn)
 #### **-Branch: _`bot-telegram`_**
-- viết servcie bắn bug về telegram khi có bug
+- viết service bắn bug về telegram khi có bug
