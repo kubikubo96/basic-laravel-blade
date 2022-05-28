@@ -56,7 +56,6 @@ class PermissionController extends Controller
         return view('admin.permissions.row_permission', compact('permissions'));
     }
 
-
     public function postDelete(Request $request)
     {
         $permission = $this->permissionRepository->find($request->id);
