@@ -2,11 +2,11 @@
 
 namespace App\Repositories\User;
 
-use App\Repositories\EloquentRepository;
+use App\Repositories\BaseRepository;
 use App\Role;
 use App\User;
 
-class UserRepository extends EloquentRepository
+class UserRepository extends BaseRepository
 {
     /**
      * get model

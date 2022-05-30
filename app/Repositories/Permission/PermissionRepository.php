@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Permission;
 
-use App\Repositories\EloquentRepository;
+use App\Repositories\BaseRepository;
 
-class PermissionRepository extends EloquentRepository
+class PermissionRepository extends BaseRepository
 {
     /**
      * get model

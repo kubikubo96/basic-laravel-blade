@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Post;
 
-use App\Repositories\EloquentRepository;
+use App\Repositories\BaseRepository;
 use App\Post;
 use App\Services\PostService;
 
-class PostRepository extends EloquentRepository
+class PostRepository extends BaseRepository
 {
     use PostService;
 

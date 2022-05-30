@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\BillCassoLog;
 
-class BillCassoLogRepository extends EloquentRepository
+class BillCassoLogRepository extends BaseRepository
 {
     public function getModel(): string
     {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Một lớp có thể kế thừa từ nhiều interface khác nhau bằng từ khóa implements
  */
-abstract class EloquentRepository implements RepositoryInterface
+abstract class BaseRepository implements RepositoryInterface
 {
     /**
      * @var Model

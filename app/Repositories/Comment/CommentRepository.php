@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Comment;
 
-use App\Repositories\EloquentRepository;
+use App\Repositories\BaseRepository;
 
-class CommentRepository extends EloquentRepository
+class CommentRepository extends BaseRepository
 {
     /**
      * get model
