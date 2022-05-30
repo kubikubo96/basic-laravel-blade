@@ -71,7 +71,7 @@ class EndpointWebhookCasso extends Controller
             $params[$key]['corresponsive_bank_name'] = $item['corresponsiveBankName'] ?? null;
             $params[$key]['created_at'] = $params[$key]['updated_at'] = Carbon::now();
 
-            $bill_log = $this->buillCassoLogRepo->queryNor(['id_bill' => (int)$item['id']])->first();
+            $bill_log = $this->buillCassoLogRepo->query(['id_bill' => (int)$item['id']])->first();
             if ($bill_log) {
                 //order bị trùng lặp, do đã xử lý trước đây
                 $params[$key]['status'] = BillCassoLog::STATUS_DUPLICATE;

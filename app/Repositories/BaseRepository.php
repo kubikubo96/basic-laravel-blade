@@ -37,6 +37,11 @@ abstract class BaseRepository implements RepositoryInterface
         );
     }
 
+    public function _query()
+    {
+        return $this->_model;
+    }
+
     /**
      * Get all
      */
@@ -63,6 +68,16 @@ abstract class BaseRepository implements RepositoryInterface
     public function create(array $attributes)
     {
         return $this->_model->create($attributes);
+    }
+
+    /**
+     * Create
+     * @param array $attributes
+     * @return mixed
+     */
+    public function insert(array $attributes)
+    {
+        return $this->_model->insert($attributes);
     }
 
     /**
@@ -97,17 +112,20 @@ abstract class BaseRepository implements RepositoryInterface
         return false;
     }
 
-    public function queryNor($conds = [], $order = [])
+    public function query($options = [], $with = [], $order = [])
     {
         $query = $this->_model;
-        if ($conds) {
-            foreach ($conds as $key => $value) {
+        if ($options) {
+            foreach ($options as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
                     $query = $query->where($key, $value);
                 }
             }
+        }
+        if($with) {
+            $query = $query->with($with);
         }
         if ($order) {
             foreach ($order as $key => $value) {
@@ -119,16 +137,44 @@ abstract class BaseRepository implements RepositoryInterface
         return $query;
     }
 
-    public function queryAdv($conds = [], $query = null)
+    public function queryOptions($options = [])
     {
-        if (is_null($query)) {
-            $query = $this->_model;
+        $query = $this->query();
+        if (!empty($options['select'])) {
+            $query = $query->select($options['select']);
         }
-        if (!empty($conds['select'])) {
-            $query = $query->select($conds['select']);
+
+        if (!empty($options['options'])) {
+            $query = $this->switchQuery($options['options'], $query);
         }
-        if (!empty($conds['data'])) {
-            foreach ($conds['data'] as $item) {
+
+        if(!empty($options['with'])) {
+            if(!empty($options['with']['relation']) && !empty($options['with']['options'])) {
+                $relation = $options['with']['relation'];
+                $options = $options['with']['options'];
+                $query = $query->with([$relation => function ($query) use ($options) {
+                    $this->switchQuery($options, $query);
+                }]);
+            } else {
+                $query = $query->with($options['with']);
+            }
+        }
+
+        if(!empty($options['where-has']['relation']) && !empty($options['where-has']['options'])) {
+            $relation = $options['where-has']['relation'];
+            $options = $options['where-has']['options'];
+            $query = $query->whereHas($relation, function ($query) use ($options) {
+                $this->switchQuery($options, $query);
+            });
+        }
+
+        return $query->orderBy($options['order_by'] ?? 'created_at', $options['sort'] ?? 'desc');
+    }
+
+    public function switchQuery($options, $query)
+    {
+        if (!empty($options)) {
+            foreach ($options as $item) {
                 $opera = $item['opera'] ?? '=';
                 switch ($opera) {
                     case 'like':
@@ -149,17 +195,26 @@ abstract class BaseRepository implements RepositoryInterface
                     default:
                         $query = $query->where($item['key'], $opera, $item['value']);
                 }
+
             }
         }
-
-        //sắp xếp
-        $query = $query->orderBy($conds['order_by'] ?? 'created_at', $conds['sort'] ?? 'desc');
-
         return $query;
     }
 
-    public function paginateQuery($query, $limit = 5)
+    public function paginatedQuery($query, $page = 1, $limit = 15)
     {
-        return $query->paginate($limit);
+        $page = (int)$page;
+        $limit = (int)$limit;
+        if ($page <= 0) {
+            $page = 1;
+        }
+        if ($limit > 100) {
+            $limit = 100;
+        }
+
+        $query->skip(($page - 1) * $limit);
+        $query->take($limit);
+
+        return $query->get();
     }
 }
