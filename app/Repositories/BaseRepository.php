@@ -149,23 +149,31 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         if(!empty($options['with'])) {
-            if(!empty($options['with']['relation']) && !empty($options['with']['options'])) {
+            if(!empty($options['with']['relation'])) {
                 $relation = $options['with']['relation'];
-                $options = $options['with']['options'];
+                $options = $options['with']['options'] ?? [];
                 $query = $query->with([$relation => function ($query) use ($options) {
-                    $this->switchQuery($options, $query);
+                    if(!empty($options)) {
+                        $this->switchQuery($options, $query);
+                    }
                 }]);
             } else {
                 $query = $query->with($options['with']);
             }
         }
 
-        if(!empty($options['where-has']['relation']) && !empty($options['where-has']['options'])) {
-            $relation = $options['where-has']['relation'];
-            $options = $options['where-has']['options'];
-            $query = $query->whereHas($relation, function ($query) use ($options) {
-                $this->switchQuery($options, $query);
-            });
+        if(!empty($options['where-has'])) {
+            if(!empty($options['where-has']['relation'])) {
+                $relation = $options['where-has']['relation'];
+                $options = $options['where-has']['options'] ?? [];
+                $query = $query->whereHas($relation, function ($query) use ($options) {
+                    if(!empty($options)) {
+                        $this->switchQuery($options, $query);
+                    }
+                });
+            } else {
+                $query = $query->whereHas($options['where-has'], function ($query) {});
+            }
         }
 
         return $query->orderBy($options['order_by'] ?? 'created_at', $options['sort'] ?? 'desc');
