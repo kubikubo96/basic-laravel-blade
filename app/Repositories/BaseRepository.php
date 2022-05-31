@@ -225,4 +225,22 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $query->get();
     }
+
+    public function paginate($options, $page = 1, $limit = 15, $with = [], $order = []): array
+    {
+        $query = $this->query($options, $with, $order);
+        $res['total'] = $query->count();
+        $res['data'] = $this->paginatedQuery($query, $page, $limit);
+
+        return $res;
+    }
+
+    public function paginateOptions($options, $page = 1, $limit = 15): array
+    {
+        $query = $this->queryOptions($options);
+        $res['total'] = $query->count();
+        $res['data'] = $this->paginatedQuery($query, $page, $limit);
+
+        return $res;
+    }
 }
