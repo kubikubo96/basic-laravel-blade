@@ -30,8 +30,8 @@ class EndpointWebhookCasso extends Controller
     {
         $response = $request->all();
         $header = Helper::getHeader();
-        Log::error('payment:', $response);
-        Log::error('header:', $header);
+        Log::info('payment:', $response);
+        Log::info('header:', $header);
 
         $secure_token = $header['Secure-Token'] ?? $header['secure-token'] ?? null;
         if ($secure_token != self::API_KEY) {
