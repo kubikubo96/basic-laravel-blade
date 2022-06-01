@@ -85,8 +85,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapCustomRoutes()
     {
-        Route::middleware('web')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/route.php'));
+        Route::namespace($this->namespace)->group(base_path('routes/route.php'));
     }
 }
