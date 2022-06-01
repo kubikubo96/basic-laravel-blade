@@ -20,7 +20,7 @@ class PostRepository extends BaseRepository
 
     public function getAll()
     {
-        return Post::with('comment', 'user')->get();
+        return $this->_model->with('comment', 'user')->get();
     }
 
     //xử lý postAdd bên PostController
@@ -56,16 +56,16 @@ class PostRepository extends BaseRepository
 
     public function postPaginate($limit = 5)
     {
-        return Post::paginate($limit);
+        return $this->_model->paginate($limit);
     }
 
     public function postHotNews()
     {
-        return Post::first();
+        return $this->_model->first();
     }
 
     public function postHotNews2()
     {
-        return Post::all()->skip(1)->take(3);
+        return $this->_model->all()->skip(1)->take(3);
     }
 }
