@@ -23,7 +23,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * get model
+     * Get model
      */
     abstract public function getModel();
 
@@ -32,14 +32,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function setModel()
     {
-        $this->_model = app()->make(
-            $this->getModel()
-        );
-    }
-
-    public function _query()
-    {
-        return $this->_model;
+        $this->_model = resolve($this->getModel());
     }
 
     /**

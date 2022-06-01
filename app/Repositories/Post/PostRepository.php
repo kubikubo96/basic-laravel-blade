@@ -10,10 +10,7 @@ class PostRepository extends BaseRepository
 {
     use PostService;
 
-    /**
-     * get model
-     */
-    public function getModel()
+    public function getModel(): string
     {
         return Post::class;
     }
