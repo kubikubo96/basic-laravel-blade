@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <base href="{{asset('')}}" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -18,7 +19,6 @@
     @yield('script')
 
     {{--    Tự tạo khi làm--}}
-    <base href="{{asset('')}}" />
     <title>Cafebiz</title>
 </head>
 
