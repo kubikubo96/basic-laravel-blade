@@ -58,7 +58,6 @@ INSERT INTO `posts` VALUES ('2', '1', 'Ngày lễ độc thân 11.11 bắt ngu�
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
                          `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                         `role_id` int(20) DEFAULT NULL,
                          `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
                          `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
                          `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -74,5 +73,8 @@ CREATE TABLE `users` (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', '1', 'root', 'root@gmail.com', '$2y$10$2bXEoeEyF6OUMyZePTuXU.SbfuB8EtGrEU8Wt.ITxv1gIzGpv6F2y', '1', null, null, '2019-11-08 07:54:44', '2019-11-08 07:54:44'); /*pass: 1*/
-INSERT INTO `users` VALUES ('2', null, 'NGUYỄN TẤT TIẾN', 'tien.nguyentat.1@gmail.com', '$2y$10$nMo7O4u/UaVzfh44UdSyHOOmbKwhHjWAOZly/exGwxrxi0hJo0786', '0', null, null, '2019-11-10 10:04:47', '2019-11-11 10:15:22');
+INSERT INTO `users` VALUES ('1', 'root', 'root@gmail.com', '$2y$10$2bXEoeEyF6OUMyZePTuXU.SbfuB8EtGrEU8Wt.ITxv1gIzGpv6F2y', '1', null, null, '2019-11-08 07:54:44', '2019-11-08 07:54:44'); /*pass: 1*/
+INSERT INTO `users` VALUES ('2', 'admin1', 'admin1@gmail.com', '$2y$10$2bXEoeEyF6OUMyZePTuXU.SbfuB8EtGrEU8Wt.ITxv1gIzGpv6F2y', '1', null, null, '2019-11-08 07:54:44', '2019-11-08 07:54:44'); /*pass: 1*/
+INSERT INTO `users` VALUES ('3', 'admin2', 'admin2@gmail.com', '$2y$10$2bXEoeEyF6OUMyZePTuXU.SbfuB8EtGrEU8Wt.ITxv1gIzGpv6F2y', '1', null, null, '2019-11-08 07:54:44', '2019-11-08 07:54:44'); /*pass: 1*/
+INSERT INTO `users` VALUES ('4', 'admin3', 'admin3@gmail.com', '$2y$10$2bXEoeEyF6OUMyZePTuXU.SbfuB8EtGrEU8Wt.ITxv1gIzGpv6F2y', '1', null, null, '2019-11-08 07:54:44', '2019-11-08 07:54:44'); /*pass: 1*/
+INSERT INTO `users` VALUES ('5', 'tiennt', 'tien.nguyentat.1@gmail.com', '$2y$10$nMo7O4u/UaVzfh44UdSyHOOmbKwhHjWAOZly/exGwxrxi0hJo0786', '0', null, null, '2019-11-10 10:04:47', '2019-11-11 10:15:22');

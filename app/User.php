@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use SoftDeletes;
+    use Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'role_id', 'name', 'email', 'password', 'admin'
+        'name', 'email', 'password', 'admin'
     ];
 
     /**
@@ -51,15 +53,5 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany('App\Post', 'user_id', 'id');
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
-    }
-
-    public function hasPermission(Permission $permission)
-    {
-        return !!optional(optional($this->role)->permissions)->contains($permission);
     }
 }

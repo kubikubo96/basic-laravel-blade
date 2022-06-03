@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use App\Post;
 use App\Policies\PostPolicy;
-use App\Permission;
-use App\Comment;
+use App\Post;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Spatie\Permission\Models\Permission;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -19,7 +16,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-//         'App\Model' => 'App\Policies\ModelPolicy',
         Post::class => PostPolicy::class,
     ];
 
@@ -33,18 +29,16 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //SupperAdmin
-        Gate::before(function($user){
-            if($user->id == 1){
-                return true;
-            }
+        Gate::before(function ($user) {
+            return $user->hasRole('supper_admin') ? true : null;
         });
 
-        if(! $this->app->runningInConsole()){
-            foreach(Permission::all() as $permission){
-                Gate::define($permission->name,function ($user) use ($permission) {
-                    return $user->hasPermission($permission);
+        /*if (!$this->app->runningInConsole()) {
+            foreach (Permission::all() as $permission) {
+                Gate::define($permission->name, function ($user) use ($permission) {
+                    return $user->hasPermissionTo($permission);
                 });
             }
-        }
+        }*/
     }
 }
