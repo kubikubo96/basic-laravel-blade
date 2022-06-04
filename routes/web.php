@@ -23,7 +23,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function () {
         return view('admin.layouts.index');
     });
     //Nhóm Route posts
-    Route::group(['prefix' => 'posts'], function () {
+    Route::group(['middleware' => ['role:posts'], 'prefix' => 'posts'], function () {
         Route::get('/', 'PostController@index');
         Route::post('add', 'PostController@postAdd')->name('post.add');
         Route::post('delete', 'PostController@postDelete')->name('admin.posts.delete');
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function () {
     });
 
     //Nhóm route Users
-    Route::group(['prefix' => 'users',], function () {
+    Route::group(['middleware' => ['role:users'], 'prefix' => 'users'], function () {
         Route::get('/', 'UserController@getAll');
         Route::post('add', 'UserController@postAdd')->name('user.add');
         Route::post('edit_modal_user', 'UserController@openModalUpdate')->name('admin.users.edit_modal_user');
@@ -47,22 +47,25 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function () {
     Route::get('comments', 'CommentController@getComment');
     Route::post('comments/delete', 'CommentController@postDelete')->name('admin.comments.delete');
 
-    //Group permissions
-    Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/', 'PermissionController@getAll');
-        Route::post('add', 'PermissionController@postAdd')->name('admin.permissions.add');
-        Route::post('edit_modal_permission', 'PermissionController@openEditModalPermission')->name('admin.permissions.edit_modal_permission');
-        Route::post('edit', 'PermissionController@postEdit')->name('admin.permissions.edit');
-        Route::post('delete', 'PermissionController@postDelete')->name('admin.permissions.delete');
-    });
 
-    //Group permissions
-    Route::group(['prefix' => 'roles'], function () {
-        Route::get('/', 'RoleController@getAll');
-        Route::post('add', 'RoleController@postAdd')->name('admin.roles.add');
-        Route::post('edit_modal_role', 'RoleController@openEditModalRole')->name('admin.roles.edit_modal_role');
-        Route::post('edit', 'RoleController@postEdit')->name('admin.roles.edit');
-        Route::post('delete', 'RoleController@postDelete')->name('admin.roles.delete');
+    Route::group(['middleware' => ['role:supper-admin']], function () {
+        //Group permissions
+        Route::group(['prefix' => 'permissions'], function () {
+            Route::get('/', 'PermissionController@getAll');
+            Route::post('add', 'PermissionController@postAdd')->name('admin.permissions.add');
+            Route::post('edit_modal_permission', 'PermissionController@openEditModalPermission')->name('admin.permissions.edit_modal_permission');
+            Route::post('edit', 'PermissionController@postEdit')->name('admin.permissions.edit');
+            Route::post('delete', 'PermissionController@postDelete')->name('admin.permissions.delete');
+        });
+
+        //Group roles
+        Route::group(['prefix' => 'roles'], function () {
+            Route::get('/', 'RoleController@getAll');
+            Route::post('add', 'RoleController@postAdd')->name('admin.roles.add');
+            Route::post('edit_modal_role', 'RoleController@openEditModalRole')->name('admin.roles.edit_modal_role');
+            Route::post('edit', 'RoleController@postEdit')->name('admin.roles.edit');
+            Route::post('delete', 'RoleController@postDelete')->name('admin.roles.delete');
+        });
     });
 });
 

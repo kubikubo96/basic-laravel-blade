@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use SoftDeletes;
+    use Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +41,7 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
+    const IS_ADMINISTRATOR = 1;
     const SUPPER_ADMIN_ID = 1;
 
     //tạo liên kết các model
@@ -60,10 +60,32 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles');
     }
 
-    public function hasPermission(Permission $permission)
+    public function hasRole($role): bool
+    {
+        if (is_string($role)) {
+            return $this->roles->contains('name', $role);
+        }
+
+        if (is_int($role)) {
+            return $this->roles->contains('id', $role);
+        }
+
+        if (is_array($role)) {
+            foreach ($role as $item) {
+                if ($this->hasRole($item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return false;
+    }
+
+    public function hasPermission($permission): bool
     {
         return $this->roles->contains(function ($role) use ($permission) {
-            if($role->permissions->contains($permission)) {
+            if ($role->permissions->contains($permission)) {
                 return true;
             }
             return false;

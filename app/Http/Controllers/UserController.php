@@ -27,7 +27,7 @@ class UserController extends Controller
 
     function getAll()
     {
-        $user = $this->userRepository->getAll();
+        $user = $this->userRepo->getAll();
         return view('admin.users.index', ['user' => $user]);
     }
 

@@ -32,11 +32,15 @@
                 </div>
             </td>
             <td>
+                @can('updatePost', $pt)
                 <a href="javascript:void(0);" onclick="openModalEdit({{$pt->id}})">Edit
                 </a>
+                @endcan
             </td>
             <td>
+                @can('deletePost', $pt)
                 <a href="javascript:void(0)" onclick="deletePost({{ $pt->id }})" style="color:#FE2E2E;">Delete</a>
+                @endcan
             </td>
         </tr>
         @endforeach

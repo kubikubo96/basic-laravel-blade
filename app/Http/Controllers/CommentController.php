@@ -45,7 +45,7 @@ class CommentController extends Controller
         $comment = $this->commentRepository->find($request->id);
         $post = $this->postRepository->find($comment->post_id);
         //quyền chỉ được delete những comment bài viết của mình
-        $this->authorize($post, 'postDelete');
+        $this->authorize('deletePost', $post);
         $comment->delete();
         $comment = $this->commentRepository->getAll();
         return view('admin.comments.row_comment', compact('comment'));
