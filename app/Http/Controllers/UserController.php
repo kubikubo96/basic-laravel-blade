@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
@@ -10,15 +11,17 @@ use App\Http\Requests\UserRequests\UserAddRequest;
 class UserController extends Controller
 {
 
-    protected $userRepository;
     protected $userAddRequest;
+    protected $userRepo;
+    protected $roleRepo;
 
-    function __construct(UserRepository $userRepository, UserAddRequest $userAddRequest)
+    function __construct(RoleRepository $roleRepo, UserRepository $userRepo, UserAddRequest $userAddRequest)
     {
-        $this->userRepository = $userRepository;
         $this->userAddRequest = $userAddRequest;
+        $this->userRepo = $userRepo;
+        $this->roleRepo = $roleRepo;
 
-        $rolesForAddUser = $this->userRepository->getRolesForAddUser();
+        $rolesForAddUser = $this->userRepo->getRolesForAddUser();
         view()->share('rolesForAddUser', $rolesForAddUser);
     }
 
@@ -34,14 +37,14 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->all()]);
         }
-        $this->userRepository->create($request);
-        $user = $this->userRepository->getAll();
+        $this->userRepo->create($request);
+        $user = $this->userRepo->getAll();
         return view('admin.users.row_user', compact('user'));
     }
 
     function openModalUpdate(Request $request)
     {
-        $user = $this->userRepository->openModalUpdate($request);
+        $user = $this->userRepo->openModalUpdate($request);
         return view('admin.users.edit', compact('user'));
     }
 
@@ -50,16 +53,16 @@ class UserController extends Controller
         if (empty($request->name) || ($request->password != $request->confirm_password)) {
             return ['status' => 1, 'message' => 'Edit thất bại! '];
         }
-        $this->userRepository->userEditRepo($request);
-        $user = $this->userRepository->getAll();
+        $this->userRepo->userEditRepo($request);
+        $user = $this->userRepo->getAll();
         return view('admin.users.row_user', compact('user'));
     }
 
     function postDelete(Request $request)
     {
-        $user = $this->userRepository->find($request->id);
+        $user = $this->userRepo->find($request->id);
         $user->delete();
-        $user = $this->userRepository->getAll();
+        $user = $this->userRepo->getAll();
         return view('admin.users.row_user', compact('user'));
     }
 

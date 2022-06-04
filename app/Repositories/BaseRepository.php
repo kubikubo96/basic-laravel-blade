@@ -105,6 +105,11 @@ abstract class BaseRepository implements RepositoryInterface
         return false;
     }
 
+    public function first($options = [], $with = [])
+    {
+        return $this->query($options, $with)->first();
+    }
+
     public function query($options = [], $with = [], $order = [])
     {
         $query = $this->_model;

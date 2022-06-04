@@ -2,14 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Post;
-use App\Policies\PostPolicy;
 use App\Models\Permission;
-use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
+use App\Policies\PostPolicy;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,15 +31,15 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //SupperAdmin
-        Gate::before(function($user){
-            if($user->id == 1){
+        Gate::before(function ($user) {
+            if ($user->id === User::SUPPER_ADMIN_ID) {
                 return true;
             }
         });
 
-        if(! $this->app->runningInConsole()){
-            foreach(Permission::all() as $permission){
-                Gate::define($permission->name,function ($user) use ($permission) {
+        if (!$this->app->runningInConsole()) {
+            foreach (Permission::all() as $permission) {
+                Gate::define($permission->name, function (User $user) use ($permission) {
                     return $user->hasPermission($permission);
                 });
             }

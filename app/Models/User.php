@@ -42,6 +42,8 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
+    const SUPPER_ADMIN_ID = 1;
+
     //tạo liên kết các model
     public function comments()
     {
@@ -56,5 +58,15 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function hasPermission(Permission $permission)
+    {
+        return $this->roles->contains(function ($role) use ($permission) {
+            if($role->permissions->contains($permission)) {
+                return true;
+            }
+            return false;
+        });
     }
 }
