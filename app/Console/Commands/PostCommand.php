@@ -44,8 +44,8 @@ class PostCommand extends Command
         $data = [
             'user_id' => 2,
             'title' => time().'- auto run schedule',
-            'title_link' => time().'- auto run schedule',
-            'content_post' => time().'- auto run schedule',
+            'slug' => time().'- auto run schedule',
+            'content' => time().'- auto run schedule',
             'image' => time().'- auto run schedule',
         ];
 

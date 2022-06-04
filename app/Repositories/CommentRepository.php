@@ -1,24 +1,20 @@
 <?php
 
-namespace App\Repositories\Comment;
+namespace App\Repositories;
 
+use App\Models\Comment;
 use App\Repositories\BaseRepository;
 
 class CommentRepository extends BaseRepository
 {
-    /**
-     * get model
-     * @return string
-     */
-    public function getModel()
+    public function getModel(): string
     {
-        return \App\Comment::class;
+        return Comment::class;
     }
 
     public function getAll()
     {
-        $comment = \App\Comment::with('user', 'post')->get();
-        return $comment;
+        return Comment::with('user', 'post')->get();
     }
 
     //xử lý postAdd bên UserController
@@ -29,10 +25,8 @@ class CommentRepository extends BaseRepository
         $user_id = $attributes->id_user;
         $data['post_id'] = $post_id;
         $data['user_id'] = $user_id;
-        $data['content_comment'] = $attributes->content_comment;
+        $data['content'] = $attributes->content;
 
-        $result = $this->create($data);
-
-        return $result;
+        return $this->create($data);
     }
 }

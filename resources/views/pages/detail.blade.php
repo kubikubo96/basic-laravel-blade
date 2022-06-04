@@ -11,7 +11,7 @@
                 <div style="border-bottom: 1px dotted #b4b4b4; margin: 15px;"></div>
                 <div class="c11" style="width: 90%; padding-left: 50px;">
                     <img style="margin-top: 30px;margin-bottom: 30px;" src="images/{{$post->image}}" width="100%" />
-                    {!! $post->content_post !!}
+                    {!! $post->content !!}
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -27,7 +27,7 @@
                                 <form action="" method="" role="">
                                     @csrf
                                     <div class="form-group">
-                                        <textarea disabled class="form-control" name="content_comment"
+                                        <textarea disabled class="form-control" name="content"
                                             rows="3"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-dark">Comment</button>
@@ -43,7 +43,7 @@
                                     <input type="hidden" id="id_user" value="{{Auth::id()}}" />
                                     <input type="hidden" id="id_post" value="{{$post->id}}" />
                                     <div class="form-group">
-                                        <textarea class="form-control" name="content_comment" id="content_comment"
+                                        <textarea class="form-control" name="content" id="content"
                                             rows="3"></textarea>
                                     </div>
                                     <button type="button" onclick="addComment()" class="btn btn-dark">Comment
@@ -82,7 +82,7 @@
             var data = {
                 id_post: $('#id_post').val(),
                 id_user: $('#id_user').val(),
-                content_comment: $('#content_comment').val(),
+                content: $('#content').val(),
             }
 
             $.ajax({

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories\Post;
+namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
-use App\Post;
+use App\Models\Post;
 use App\Services\PostService;
 
 class PostRepository extends BaseRepository
@@ -17,25 +17,22 @@ class PostRepository extends BaseRepository
 
     public function getAll()
     {
-        return $this->_model->with('comment', 'user')->get();
+        return $this->_model->with('comments', 'user')->get();
     }
 
     //xử lý postAdd bên PostController
     public function create_post($attributes)
     {
         $data = $attributes->all();
-
         $data['image'] = $this->updateImage($attributes->file('image'));
-
         return $this->create($data);
     }
 
     //xử lý openEditModal bên PostController
-    public function openEditModal_post($attributes)
+    public function openModalUpdate($attributes)
     {
         $data = $attributes->all();
         $id = $data['id'];
-
         return $this->find($id);
     }
 
@@ -43,11 +40,9 @@ class PostRepository extends BaseRepository
     public function postEditRepo($attributes)
     {
         $data = $attributes->except('image');
-
         if ($attributes->hasFile('image')) {
             $data['image'] = $this->updateImage($attributes->file('image'));
         }
-
         return $this->update($data['id'], $data);
     }
 
@@ -56,12 +51,12 @@ class PostRepository extends BaseRepository
         return $this->_model->paginate($limit);
     }
 
-    public function postHotNews()
+    public function firstNews()
     {
         return $this->_model->first();
     }
 
-    public function postHotNews2()
+    public function secondNews()
     {
         return $this->_model->all()->skip(1)->take(3);
     }

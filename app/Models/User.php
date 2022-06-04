@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,21 +45,16 @@ class User extends Authenticatable
     //tạo liên kết các model
     public function comments()
     {
-        return $this->hasMany('App\Comment', 'user_id', 'id');
+        return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 
     public function posts()
     {
-        return $this->hasMany('App\Post', 'user_id', 'id');
+        return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
-    }
-
-    public function hasPermission(Permission $permission)
-    {
-        return !!optional(optional($this->role)->permissions)->contains($permission);
+        return $this->belongsToMany(Role::class, 'user_roles');
     }
 }

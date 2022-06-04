@@ -1,49 +1,41 @@
 <?php
 
-namespace App\Repositories\User;
+namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
-use App\Role;
-use App\User;
+use App\Models\Role;
+use App\Models\User;
 
 class UserRepository extends BaseRepository
 {
-    /**
-     * get model
-     * @return string
-     */
-
-    public function getModel()
+    public function getModel(): string
     {
         return User::class;
     }
 
     function getAll()
     {
-        return User::with('comments', 'posts', 'role')
+        return User::with('comments', 'posts', 'roles')
             ->where('id', '!=', '1')->get();
     }
 
     //xử lý postAdd bên UserController
-    public function create_user($attributes)
+    public function create($attributes)
     {
         $data = $attributes->all();
-
         if (!empty($attributes->admin)) {
             $data['admin'] = $attributes->admin;
         } else {
             $data['admin'] = 0;
         }
-
         return $this->create($data);
     }
 
     //xử lý openEditModal bên UserController
-    public function openEditModal_user($attributes)
+    public function openModalUpdate($attributes)
     {
         $data = $attributes->all();
         $id = $data['id'];
-
         return $this->find($id);
     }
 
@@ -53,17 +45,14 @@ class UserRepository extends BaseRepository
         $data = array();
         $id = $attributes->id;
         $data['name'] = $attributes->name;
-
         if ($attributes->password != null) {
             $data['password'] = bcrypt($attributes->password);
         }
-
         return $this->update($id, $data);
     }
 
     function getRolesForAddUser()
     {
-        return Role::with('permissions', 'users', 'permission_roles')
-            ->where('id', '!=', '1')->get();
+        return Role::with('users', 'permissions')->get();
     }
 }

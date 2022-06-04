@@ -20,7 +20,7 @@
                             </div>
                             <div class="col-7 c7">
                                 <h4><a style="text-decoration: none;color: #000000;"
-                                       href="detail/{{$pt['id']}}/{{$pt['title_link']}}.html">{{$pt['title']}}</a></h4>
+                                       href="detail/{{$pt['id']}}/{{$pt['slug']}}.html">{{$pt['title']}}</a></h4>
                                 <p><b>Sống</b> - 2 giờ trước</p>
                             </div>
                         @endforeach

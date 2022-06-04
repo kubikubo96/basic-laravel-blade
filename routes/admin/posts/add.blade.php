@@ -23,12 +23,12 @@
                         <input class="form-control" name="title" id="title" placeholder="Nhập title" />
                     </div>
                     <div class="form-group">
-                        <label>Title_link</label>
-                        <input class="form-control" name="title_link" id="title_link" placeholder="Nhập title_link" />
+                        <label>slug</label>
+                        <input class="form-control" name="slug" id="slug" placeholder="Nhập slug" />
                     </div>
                     <div class="form-group">
                         <label>Content</label>
-                        <textarea class="form-control" rows="3" name="content_post" id="content_post"></textarea>
+                        <textarea class="form-control" rows="3" name="content" id="content"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Image</label>

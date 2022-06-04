@@ -3,8 +3,8 @@
         <tr>
             <th>Poster</th>
             <th>Title</th>
-            <th>Title_link</th>
-            <th>Content_post</th>
+            <th>slug</th>
+            <th>content</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -25,10 +25,10 @@
                     <img src="images/{{$pt->image}}" width="100px" height="100px" />
                 </div>
             </td>
-            <td id="title_link_edit">{{$pt->title_link}}</td>
+            <td id="slug_edit">{{$pt->slug}}</td>
             <td>
                 <div id="conent_post_edit" style="overflow: auto;height: 300px; width: 550px;">
-                    {!! $pt->content_post !!}
+                    {!! $pt->content !!}
                 </div>
             </td>
             <td>

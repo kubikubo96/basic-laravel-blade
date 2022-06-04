@@ -30,14 +30,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function () {
         Route::post('edit-modal', 'PostController@openEditModal')->name('admin.posts.open_edit_modal');
         Route::post('edit', 'PostController@postEdit')->name('admin.posts.edit');
         Route::get('result', function () {return view('admin.posts.result');});
-        Route::get('content_post', 'PostController@getContentPost');
+        Route::get('content', 'PostController@getContentPost');
     });
 
     //Nhóm route Users
     Route::group(['prefix' => 'users',], function () {
         Route::get('/', 'UserController@getAll');
         Route::post('add', 'UserController@postAdd')->name('user.add');
-        Route::post('edit_modal_user', 'UserController@openEditModalUser')->name('admin.users.edit_modal_user');
+        Route::post('edit_modal_user', 'UserController@openModalUpdate')->name('admin.users.edit_modal_user');
         Route::post('edit', 'UserController@postEdit')->name('admin.users.edit');
         Route::post('delete', 'UserController@postDelete')->name('admin.users.delete');
         Route::post('ajax_index', 'UserController@indexAjax');
@@ -78,5 +78,5 @@ Route::get('forgot_password', 'Pages\PageController@getForgotPassword');
 Route::post('forgot_password', 'Pages\PageController@postForgotPassword');
 Route::get('user_personal/{id}', 'Pages\PageController@getUserPersonal');
 Route::post('user_personal/{id}', 'Pages\PageController@postUserPersonal');
-Route::get('detail/{id}/{title_link}.html', 'Pages\PageController@getDetail');
+Route::get('detail/{id}/{slug}.html', 'Pages\PageController@getDetail');
 Route::post('add-comments', 'CommentController@postComment')->name('comments.add_comments');

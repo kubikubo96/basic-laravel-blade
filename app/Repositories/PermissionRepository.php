@@ -1,23 +1,20 @@
 <?php
 
-namespace App\Repositories\Permission;
+namespace App\Repositories;
 
+use App\Models\Permission;
 use App\Repositories\BaseRepository;
 
 class PermissionRepository extends BaseRepository
 {
-    /**
-     * get model
-     * @return string
-     */
-    public function getModel()
+    public function getModel(): string
     {
-        return \App\Permission::class;
+        return Permission::class;
     }
 
     public function getAll()
     {
-        return \App\Permission::with('roles', 'permission_roles')->get();
+        return Permission::with('roles')->get();
     }
 
     //xử lý postAdd bên PermissionController
@@ -26,9 +23,7 @@ class PermissionRepository extends BaseRepository
         $data = array();
         $data['title'] = $attributes->title;
         $data['name'] = $attributes->name;
-        $result = $this->create($data);
-
-        return $result;
+        return $this->create($data);
     }
 
     //xử lý openEditModal bên PermissionController
@@ -36,9 +31,7 @@ class PermissionRepository extends BaseRepository
     {
         $data = $attributes->all();
         $id = $data['id'];
-
-        $result = $this->find($id);
-        return $result;
+        return $this->find($id);
     }
 
     //xử lý permissionEdit bên PermissionController
@@ -48,9 +41,6 @@ class PermissionRepository extends BaseRepository
         $data['id'] = $attributes->id;
         $data['title'] = $attributes->title;
         $data['name'] = $attributes->name;
-
-        $result = $this->update($data['id'], $data);
-
-        return $result;
+        return $this->update($data['id'], $data);
     }
 }

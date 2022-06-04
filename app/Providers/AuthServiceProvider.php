@@ -6,10 +6,10 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use App\Post;
+use App\Models\Post;
 use App\Policies\PostPolicy;
-use App\Permission;
-use App\Comment;
+use App\Models\Permission;
+use App\Models\Comment;
 
 class AuthServiceProvider extends ServiceProvider
 {

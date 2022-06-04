@@ -21,7 +21,7 @@ class PostAddRequest
      */
     public function rules($request)
     {
-        if(empty($request->title) || empty($request->title_link) || empty($request->content_post)){
+        if(empty($request->title) || empty($request->slug) || empty($request->content)){
             return ['status' => 1, 'message' => 'Add Post thất bại, các trường không được để trống !!!'];
         }
     }

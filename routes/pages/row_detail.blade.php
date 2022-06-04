@@ -6,7 +6,7 @@
 </div>
 @endif
 <!-- Posted Comments -->
-@foreach($post->comment as $cm)
+@foreach($post->comments as $cm)
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-12">
@@ -19,7 +19,7 @@
                     <h5 class="media-heading">{{@$cm->user->name}}
                         <small>{{$cm->created_at}}</small>
                     </h5>
-                    {{$cm->content_comment}}
+                    {{$cm->content}}
                 </div>
             </div>
         </div>

@@ -6,8 +6,8 @@
         <div class="row">
             <div class="col-md-9 c1" style=" ">
                 <h4 class="c2" style="">
-                    <a href="detail/{{$hotnews->id}}/{{$hotnews->title_link}}.html"
-                        style="text-decoration: none;color: black;"><b>{{$hotnews->title}}</b>
+                    <a href="detail/{{$first_news->id}}/{{$first_news->slug}}.html"
+                        style="text-decoration: none;color: black;"><b>{{$first_news->title}}</b>
                     </a>
                 </h4>
                 <div class="row" style="margin: 0">
@@ -20,13 +20,13 @@
                             Thủy"</p>
                     </div>
                     <div class="col-md-7 c4" style="padding: 0px">
-                        <img src="images/{{$hotnews->image}}" width="94.3%" />
+                        <img src="images/{{$first_news->image}}" width="94.3%" />
                     </div>
-                    @foreach($hotnews2 as $ht)
+                    @foreach($second_news as $ht)
                     <div class="col-md-4 c6 c61" style="">
                         <img src="images/{{$ht->image}}" width="100%" />
                         <h6><a style="color: black;text-decoration: none;"
-                                href="detail/{{$ht->id}}/{{$ht->title_link}}.html">{{$ht->title}}</a></h6>
+                                href="detail/{{$ht->id}}/{{$ht->slug}}.html">{{$ht->title}}</a></h6>
                     </div>
                     @endforeach
                     <div class="row">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-7 c7">
                             <h4><a style="text-decoration: none;color: #000000;"
-                                    href="detail/{{$pt->id}}/{{$pt->title_link}}.html">{{$pt->title}}</a></h4>
+                                    href="detail/{{$pt->id}}/{{$pt->slug}}.html">{{$pt->title}}</a></h4>
                             <p><b>Sống</b> - 2 giờ trước</p>
                         </div>
                         @endforeach
