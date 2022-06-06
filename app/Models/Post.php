@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,17 +12,17 @@ class Post extends Model
     protected $table = "posts";
 
     //The attributes that are mass assignable.
-    protected $fillable = ['user_id', 'title', 'title_link', 'content_post', 'image'];
+    protected $fillable = ['user_id', 'title', 'slug', 'content', 'image'];
 
     protected $dates = ['deleted_at'];
 
-    public function comment()
+    public function comments()
     {
-        return $this->hasMany('App\Comment', 'post_id', 'id');
+        return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

@@ -28,36 +28,42 @@
                     <span class="title">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item  ">
-                <a href="admin/posts" class="nav-link">
-                    <i class="icon-book-open"></i>
-                    <span class="title">Posts</span>
-                </a>
-            </li>
-            <li class="nav-item  ">
-                <a href="admin/users" class="nav-link">
-                    <i class="icon-user"></i>
-                    <span class="title">Users</span>
-                </a>
-            </li>
+            @can('list-post')
+                <li class="nav-item  ">
+                    <a href="admin/posts" class="nav-link">
+                        <i class="icon-book-open"></i>
+                        <span class="title">Posts</span>
+                    </a>
+                </li>
+            @endcan
+            @can('list-user')
+                <li class="nav-item  ">
+                    <a href="admin/users" class="nav-link">
+                        <i class="icon-user"></i>
+                        <span class="title">Users</span>
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item  ">
                 <a href="admin/comments" class="nav-link">
                     <i class="icon-screen-tablet"></i>
                     <span class="title">Comments</span>
                 </a>
             </li>
-            <li class="nav-item  ">
-                <a href="admin/roles" class="nav-link">
-                    <i class="icon-key"></i>
-                    <span class="title">Roles</span>
-                </a>
-            </li>
-            <li class="nav-item  ">
-                <a href="admin/permissions" class="nav-link">
-                    <i class="icon-key"></i>
-                    <span class="title">Permissions</span>
-                </a>
-            </li>
+            @can('supper-admin')
+                <li class="nav-item  ">
+                    <a href="admin/roles" class="nav-link">
+                        <i class="icon-key"></i>
+                        <span class="title">Roles</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="admin/permissions" class="nav-link">
+                        <i class="icon-key"></i>
+                        <span class="title">Permissions</span>
+                    </a>
+                </li>
+            @endcan
         </ul>
         <!-- END SIDEBAR MENU -->
         <!-- END SIDEBAR MENU -->

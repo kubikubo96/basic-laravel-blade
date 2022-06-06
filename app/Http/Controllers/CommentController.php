@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Comment\CommentRepository;
-use App\Repositories\Post\PostRepository;
+use App\Repositories\CommentRepository;
+use App\Repositories\PostRepository;
 
 class CommentController extends Controller
 {
@@ -22,40 +22,32 @@ class CommentController extends Controller
     public function getComment()
     {
         $comment = $this->commentRepository->getAll();
-
         return view('admin.comments.index', ['comment' => $comment]);
     }
 
     public function postComment(Request $request)
     {
-        if (empty($request->content_comment)) {
+        $content = $request->input('content', '');
+        if (!$content) {
             $post = $this->postRepository->find($request->id_post);
-
             return view('pages.row_detail', [
                 'post' => $post,
                 'error_comment' => 'Bạn chưa nhập comment!'
             ]);
         }
         $comment = $this->commentRepository->create_comment($request);
-
         $post = $comment->post;
-
-        return view('pages.row_detail', [
-            'post' => $post,
-        ]);
+        return view('pages.row_detail', ['post' => $post]);
     }
 
     public function postDelete(Request $request)
     {
         $comment = $this->commentRepository->find($request->id);
-
         $post = $this->postRepository->find($comment->post_id);
         //quyền chỉ được delete những comment bài viết của mình
-        $this->authorize($post, 'postDelete');
-
+        $this->authorize('deletePost', $post);
         $comment->delete();
         $comment = $this->commentRepository->getAll();
-
         return view('admin.comments.row_comment', compact('comment'));
     }
 }

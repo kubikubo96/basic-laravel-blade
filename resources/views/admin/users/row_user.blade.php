@@ -14,7 +14,13 @@
             @foreach($user as $u)
             <tr id="user_id_{{$u->id}}">
                 <td>{{$u->name}}</td>
-                <td>{{@$u->role->title}}</td>
+                <td>
+                    @if(!empty($u->roles))
+                        @foreach($u->roles as $role)
+                            {{$role->name}} ,
+                        @endforeach
+                    @endif
+                </td>
                 <td>{{$u->email}}</td>
                 {{--<td>@if($u->admin == 0)--}}
                 {{--No--}}

@@ -19,16 +19,16 @@
                         placeholder="Nhập title" />
                 </div>
                 <div class="form-group">
-                    <label>Title_link</label>
-                    <input class="form-control" name="title_link" value="{{@$post->title_link}}" id="title_link"
-                        placeholder="Nhập title_link" />
+                    <label>Slug</label>
+                    <input class="form-control" name="slug" value="{{@$post->slug}}" id="slug"
+                        placeholder="Nhập slug" />
                 </div>
                 <div class="form-group">
                     <label>Content</label>
-                    <textarea class="form-control" rows="3" name="content_post"
-                        id="content_post_edit">{!! @$post->content_post !!}</textarea>
+                    <textarea class="form-control" rows="3" name="content"
+                        id="content_edit">{!! @$post->content !!}</textarea>
                     <script>
-                        CKEDITOR.replace('content_post_edit');
+                        CKEDITOR.replace('content_edit');
                     </script>
 
                 </div>

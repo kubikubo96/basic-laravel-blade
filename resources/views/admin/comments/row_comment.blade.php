@@ -17,7 +17,7 @@
                 {{@$cm->post->title}}
             </td>
             <td>
-                {{$cm->content_comment}}
+                {{$cm->content}}
             </td>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <td><a onclick="deleteComment({{ $cm->id }})" href="javascript:void(0);" style="color:#FE2E2E;"> Delete</a>

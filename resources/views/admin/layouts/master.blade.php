@@ -777,10 +777,10 @@
     {{--    ckeditor--}}
     <script src="admin_asset/ckeditor/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace('content_post_edit');
+        CKEDITOR.replace('content_edit');
     </script>
     <script>
-        CKEDITOR.replace('content_post');
+        CKEDITOR.replace('content');
     </script>
 
     <script>

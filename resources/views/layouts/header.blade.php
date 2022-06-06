@@ -1,5 +1,5 @@
 <!-- start_header -->
-<div class="header" style="background-color: #343A40;  position: fixed;z-index: 10000;width: 100%;">
+<div class="header" style="background-color: #343A40;width: 100%;">
     <div class="container" style="padding: 0px;">
         <nav style="margin: 0;padding:0;" class="navbar navbar-expand-lg navbar-light bg-dark">
             <a style="color:white;" class="navbar-brand" href="">

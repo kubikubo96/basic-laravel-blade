@@ -1,24 +1,20 @@
 <?php
 
-namespace App\Repositories\Role;
+namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
-use App\Role;
+use App\Models\Role;
 
 class RoleRepository extends BaseRepository
 {
-    /**
-     * get model
-     * @return string
-     */
-    public function getModel()
+    public function getModel(): string
     {
         return Role::class;
     }
 
     public function getAll()
     {
-        return Role::with('permissions', 'users', 'permission_roles')->get();
+        return Role::with('permissions', 'users')->get();
     }
 
     public  function addRole($attributes)

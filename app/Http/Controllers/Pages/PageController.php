@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Post\PostRepository;
-use App\Repositories\User\UserRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\PostRepository;
 use App\Services\ElasticsearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +17,7 @@ class PageController extends Controller
     private $postRepository;
     private $elasticService;
 
-    public function __construct(
-        UserRepository $userRepository,
-        PostRepository $postRepository,
-        ElasticsearchService $elasticService
-    )
+    public function __construct(UserRepository $userRepository, PostRepository $postRepository, ElasticsearchService $elasticService)
     {
         $this->userRepository = $userRepository;
         $this->postRepository = $postRepository;
@@ -31,10 +27,10 @@ class PageController extends Controller
     function homepage()
     {
         $post = $this->postRepository->postPaginate();
-        $hotnews = $this->postRepository->postHotNews();
-        $hotnews2 = $this->postRepository->postHotNews2();
+        $first_news = $this->postRepository->firstNews();
+        $second_news = $this->postRepository->secondNews();
 
-        return view('pages.index', ['post' => $post, 'hotnews' => $hotnews, 'hotnews2' => $hotnews2]);
+        return view('pages.index', ['post' => $post, 'first_news' => $first_news, 'second_news' => $second_news]);
     }
 
     public function search(Request $request)
@@ -103,7 +99,7 @@ class PageController extends Controller
             ]
         );
 
-        $this->userRepository->create_user($request);
+        $this->userRepository->create($request);
 
         return redirect('register')->with('notify', 'Đăng ký thành công !');
     }

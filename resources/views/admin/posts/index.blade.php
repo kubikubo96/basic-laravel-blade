@@ -78,8 +78,8 @@
             var formData = new FormData();
             formData.append('user_id', $('#user_id').val());
             formData.append('title', $('#title').val());
-            formData.append('title_link', $('#title_link').val());
-            formData.append('content_post', $('#content_post').val());
+            formData.append('slug', $('#slug').val());
+            formData.append('content', $('#content').val());
             formData.append('image', $('input[type=file]')[0].files[0]);
             $.ajax({
                 url: "{{ route('post.add') }}",
@@ -128,16 +128,16 @@
             * sử dụng formdata ms update được file
             * */
             var formData = new FormData();
-            var id, title, title_link, content_post, image;
+            var id, title, slug, content, image;
             id = $("#editPost").find('input[name="id"]').val();
             title = $("#editPost").find('input[name="title"]').val();
-            title_link = $("#editPost").find('input[name="title_link"]').val();
-            content_post = $("#editPost").find('textarea[name="content_post"]').val();
+            slug = $("#editPost").find('input[name="slug"]').val();
+            content = $("#editPost").find('textarea[name="content"]').val();
 
             formData.append('id', id);
             formData.append('title', title);
-            formData.append('title_link', title_link);
-            formData.append('content_post', content_post);
+            formData.append('slug', slug);
+            formData.append('content', content);
             formData.append('image', $("#editPost").find('input[type=file]')[0].files[0]);
             $.ajax({
                 url: "{{route('admin.posts.edit')}}",

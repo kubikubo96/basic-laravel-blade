@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Permission\PermissionRepository;
+use App\Repositories\PermissionRepository;
 
 class PermissionController extends Controller
 {
-    //
+    protected $permissionRepository;
+
     public function __construct(PermissionRepository $permissionRepository)
     {
         $this->permissionRepository = $permissionRepository;
@@ -15,10 +16,7 @@ class PermissionController extends Controller
 
     public function getAll()
     {
-        $this->authorize('root');
-
         $permissions = $this->permissionRepository->getAll();
-
         return view('admin.permissions.index', compact('permissions'));
     }
 
@@ -39,7 +37,6 @@ class PermissionController extends Controller
     public function openEditModalPermission(Request $request)
     {
         $permission = $this->permissionRepository->openEditModal_permission($request);
-
         return view('admin.permissions.edit', compact('permission'));
     }
 
@@ -50,20 +47,15 @@ class PermissionController extends Controller
         }
 
         $this->permissionRepository->permissionEditRepo($request);
-
         $permissions = $this->permissionRepository->getAll();
-
         return view('admin.permissions.row_permission', compact('permissions'));
     }
 
     public function postDelete(Request $request)
     {
         $permission = $this->permissionRepository->find($request->id);
-
         $permission->delete();
-
         $permissions = $this->permissionRepository->getAll();
-
         return view('admin.permissions.row_permission', compact('permissions'));
     }
 }

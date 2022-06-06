@@ -22,7 +22,7 @@ class CGlobal
     /**
      * index = type elasticsearch
      */
-    const INDEX_ELASTIC_POST = 'my_post';
+    const INDEX_ELASTIC_POST = 'post';
 
     /**
      * Job queue
