@@ -18,5 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ["cors", "jwt.verify"]], function () {
+    Route::group(['middleware' => 'adminLogin'], function () {
 
+    });
 });
