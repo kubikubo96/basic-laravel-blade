@@ -5,7 +5,7 @@ namespace App\Helpers;
 /**
  * Response Class helper
  */
-class Res
+class Response
 {
     public static function data($data = [], $total = 0, $message = 'Successfully', $status = 200): array
     {
