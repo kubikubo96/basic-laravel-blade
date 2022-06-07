@@ -17,3 +17,5 @@ sử dụng casso(developer.casso.vn)
 - Viết phân quyền cho user bằng package laravel-permission
 #### **-Branch: _`role-permission`_**
 - Viết phân quyền cho user. tự viết
+#### **-Branch: _`jwt-auth`_**
+- Tạo token cho api khi đăng nhập vào amin.
