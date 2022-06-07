@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequests\UserAddRequest;
 use App\Repositories\RoleRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\UserRepository;
-use App\Http\Requests\UserRequests\UserAddRequest;
+use Illuminate\Support\Facades\Cookie;
+use Validator;
 
 class UserController extends Controller
 {
@@ -75,9 +77,11 @@ class UserController extends Controller
     public function postLoginAdmin(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $token = auth('api')->login(Auth::user());
+            setcookie("asset_token", $token);
             return redirect('admin');
         } else {
-            return redirect('admin/login')->with('notify', 'Đăng nhập không thành công !!');
+            return redirect('admin/login')->with('notify', 'Đăng nhập không thành công.');
         }
     }
 
