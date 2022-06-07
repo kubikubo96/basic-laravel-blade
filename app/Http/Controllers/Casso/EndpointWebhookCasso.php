@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BillCassoLog;
 use App\Models\Order;
 use App\Repositories\BillCassoLogRepository;
+use App\Services\Debug\TelegramService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -97,7 +98,7 @@ class EndpointWebhookCasso extends Controller
             try {
                 $this->buillCassoLogRepo->create($params);
             } catch (Exception $e) {
-                Log::error('Error khi lưu bills log: '. $e->getMessage(), $response);
+                report($e);
             }
         }
     }
