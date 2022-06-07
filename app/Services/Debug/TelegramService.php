@@ -10,7 +10,7 @@ class TelegramService
     private static $_token = '5331786755:AAGyyeSns6rrcsMPRWr8Za_IFOmxnnwLVLI';
     private static $_chat_id = '-667596845';
 
-    public static function sendMessage($text)
+    public static function sending($text)
     {
         $uri = self::$_url . self::$_token . '/sendMessage?parse_mode=html';
         $params = [
@@ -23,5 +23,15 @@ class TelegramService
         $client = new Client();
         $response = $client->request("POST", $uri, $option);
         return json_decode($response->getBody(), true);
+    }
+
+    public static function sendError($e)
+    {
+        $html = '<b>[Lỗi] : </b><code>' . $e->getMessage() . '</code>';
+        $html .= '<b>[File] : </b><code>' . $e->getFile() . '</code>';
+        $html .= '<b>[Line] : </b><code>' . $e->getLine() . '</code>';
+        $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
+        $html .= '<b>[URL] : </b><a href="' . url()->full() . '">' . url()->full() . '</a>';
+        self::sending($html);
     }
 }

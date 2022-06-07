@@ -38,12 +38,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e)
     {
-        $html = '<b>[Lỗi] : </b><code>' . $e->getMessage() . '</code>';
-        $html .= '<b>[File] : </b><code>' . $e->getFile() . '</code>';
-        $html .= '<b>[Line] : </b><code>' . $e->getLine() . '</code>';
-        $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
-        $html .= '<b>[URL] : </b><a href="'. url()->full() .'">' . url()->full() . '</a>';
-        TelegramService::sendMessage($html);
+        TelegramService::sendError($e);
 
         parent::report($e);
     }
