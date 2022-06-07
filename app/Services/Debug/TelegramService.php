@@ -25,11 +25,11 @@ class TelegramService
         return json_decode($response->getBody(), true);
     }
 
-    public static function sendError($e)
+    public static function sendError($exception)
     {
-        $html = '<b>[Lỗi] : </b><code>' . $e->getMessage() . '</code>';
-        $html .= '<b>[File] : </b><code>' . $e->getFile() . '</code>';
-        $html .= '<b>[Line] : </b><code>' . $e->getLine() . '</code>';
+        $html = '<b>[Lỗi] : </b><code>' . $exception->getMessage() . '</code>';
+        $html .= '<b>[File] : </b><code>' . $exception->getFile() . '</code>';
+        $html .= '<b>[Line] : </b><code>' . $exception->getLine() . '</code>';
         $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
         $html .= '<b>[URL] : </b><a href="' . url()->full() . '">' . url()->full() . '</a>';
         self::sending($html);
