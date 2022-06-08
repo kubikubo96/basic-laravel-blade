@@ -51,11 +51,38 @@
                         style="color:white; margin-right: 10px;font-size: 12px;font-weight: bold;text-decoration: none;">LOGOUT</a>
                     @endif
                 </div>
-                <div class="tt-noty" style="margin-left: 20px;">
+                <div class="tt-noty" style="margin-left: 20px; position: relative;">
                     <a href="void:javascript(0);"><i style="color: white;" class="fa fa-bell-o fa-lg" aria-hidden="true"></i></a>
+                    <a 
+                    class="tt-num-noty"
+                     href="void:javascript(0);" 
+                     style="position: relative;font-weight: bold;color: white;position: absolute;left: 20px;top: -10px;"
+                     >
+                     1
+                    </a>
+                </div>
+                <div class="mess-noty" style="display: none; position: absolute;background: white;right: -200px;top: 35px;box-shadow: 1px 0px 10px 3px rgb(0 0 0 / 38%);z-index: 1;">
+                    <ul style="padding: 20px;">
+                        <li style="list-style-type: none;">Bài viết title 1 vừa thay đổi</li>
+                    </ul>
                 </div>
             </div>
         </nav>
     </div>
 </div>
 <!-- end header-->
+@section('script')
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('.tt-noty').on('click', function () {
+        $('.mess-noty').toggle();
+    })
+
+        
+</script>
+@endsection
