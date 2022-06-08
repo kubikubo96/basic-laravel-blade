@@ -95,5 +95,9 @@
                 }
             });
         }
+
+        $('.tt-noty').on('click', function () {
+            $('.mess-noty').toggle();
+        })
 </script>
 @endsection

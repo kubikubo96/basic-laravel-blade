@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\NotificationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\PostRepository;
 use App\Services\ElasticsearchService;
@@ -17,12 +18,14 @@ class PageController extends Controller
     private $userRepository;
     private $postRepository;
     private $elasticService;
+    private $notyRepo;
 
-    public function __construct(UserRepository $userRepository, PostRepository $postRepository, ElasticsearchService $elasticService)
+    public function __construct(NotificationRepository $notyRepo, UserRepository $userRepository, PostRepository $postRepository, ElasticsearchService $elasticService)
     {
         $this->userRepository = $userRepository;
         $this->postRepository = $postRepository;
         $this->elasticService = $elasticService;
+        $this->notyRepo = $notyRepo;
     }
 
     function homepage()
@@ -30,8 +33,9 @@ class PageController extends Controller
         $post = $this->postRepository->postPaginate();
         $first_news = $this->postRepository->firstNews();
         $second_news = $this->postRepository->secondNews();
+        $notifications = $this->notyRepo->getAll();
 
-        return view('pages.index', ['post' => $post, 'first_news' => $first_news, 'second_news' => $second_news]);
+        return view('pages.index', ['post' => $post, 'first_news' => $first_news, 'second_news' => $second_news, 'notifications' => $notifications]);
     }
 
     public function search(Request $request)
@@ -149,7 +153,8 @@ class PageController extends Controller
     function getDetail($id)
     {
         $post = $this->postRepository->find($id);
-        return view('pages.detail', ['post' => $post]);
+        $notifications = $this->notyRepo->getAll();
+        return view('pages.detail', ['post' => $post, 'notifications' => $notifications]);
     }
 
     public function getForgotPassword()

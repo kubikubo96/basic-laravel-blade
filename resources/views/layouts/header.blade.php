@@ -63,7 +63,9 @@
                 </div>
                 <div class="mess-noty" style="display: none; position: absolute;background: white;right: -200px;top: 35px;box-shadow: 1px 0px 10px 3px rgb(0 0 0 / 38%);z-index: 1;">
                     <ul style="padding: 20px;">
-                        <li style="list-style-type: none;">Bài viết title 1 vừa thay đổi</li>
+                        @foreach($notifications as $noty)
+                            <li style="list-style-type: none;">{{$noty->content}}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
