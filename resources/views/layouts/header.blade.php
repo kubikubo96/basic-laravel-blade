@@ -58,7 +58,7 @@
                      href="void:javascript(0);" 
                      style="position: relative;font-weight: bold;color: white;position: absolute;left: 20px;top: -10px;"
                      >
-                     1
+                     {{count($notifications)}}
                     </a>
                 </div>
                 <div class="mess-noty" style="display: none; position: absolute;background: white;right: -200px;top: 35px;box-shadow: 1px 0px 10px 3px rgb(0 0 0 / 38%);z-index: 1;">
