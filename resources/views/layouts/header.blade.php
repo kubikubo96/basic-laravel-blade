@@ -41,8 +41,8 @@
                         style="color:white; margin-right: 10px;font-size: 12px;font-weight: bold;text-decoration: none;">ĐĂNG
                         NHẬP</a>
                     <a href="register"
-                        style="color:white; margin-right: 10px;font-size: 12px;font-weight: bold;text-decoration: none;">ĐĂNG
-                        KÝ</a>
+                        style="color:white; margin-right: 10px;font-size: 12px;font-weight: bold;text-decoration: none;">ĐĂNG KÝ
+                    </a>
                     @else
                     <i style="color:white;" class="fa fa-user" aria-hidden="true"></i>
                     <a href="user_personal/{{Auth::id()}}"
@@ -50,6 +50,9 @@
                     <a href="logout"
                         style="color:white; margin-right: 10px;font-size: 12px;font-weight: bold;text-decoration: none;">LOGOUT</a>
                     @endif
+                </div>
+                <div class="tt-noty" style="margin-left: 20px;">
+                    <a href="void:javascript(0);"><i style="color: white;" class="fa fa-bell-o fa-lg" aria-hidden="true"></i></a>
                 </div>
             </div>
         </nav>
