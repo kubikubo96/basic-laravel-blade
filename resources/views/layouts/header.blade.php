@@ -53,23 +53,23 @@
                 </div>
                 <div class="tt-noty" style="margin-left: 20px; position: relative;">
                     <a href="void:javascript(0);"><i style="color: white;" class="fa fa-bell-o fa-lg" aria-hidden="true"></i></a>
-                    <a 
+                    <a
                     class="tt-num-noty"
-                     href="void:javascript(0);" 
+                     href="void:javascript(0);"
                      style="position: relative;font-weight: bold;color: white;position: absolute;left: 20px;top: -10px;"
                      >
                      {{isset($notifications) ? count($notifications) : 0}}
                     </a>
                 </div>
+                @if(isset($notifications) && $notifications->count() > 0)
                 <div class="mess-noty" style="display: none; position: absolute;background: white;right: -200px;top: 35px;box-shadow: 1px 0px 10px 3px rgb(0 0 0 / 38%);z-index: 1;">
                     <ul style="padding: 20px;">
-                        @if(isset($notifications))
                         @foreach($notifications as $noty)
                             <li style="list-style-type: none;">{{$noty->content}}</li>
                         @endforeach
-                        @endif
                     </ul>
                 </div>
+                @endif
             </div>
         </nav>
     </div>
@@ -87,6 +87,6 @@
         $('.mess-noty').toggle();
     })
 
-        
+
 </script>
 @endsection
