@@ -71,12 +71,6 @@
 
 @section('script')
 <script>
-    $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         //add comment
         function addComment() {
             var data = {
@@ -95,9 +89,5 @@
                 }
             });
         }
-
-        $('.tt-noty').on('click', function () {
-            $('.mess-noty').toggle();
-        })
 </script>
 @endsection

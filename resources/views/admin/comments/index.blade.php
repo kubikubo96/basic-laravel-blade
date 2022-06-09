@@ -50,13 +50,6 @@
 
 @section('script')
 <script>
-    //$.ajaxSetup phải có mới gửi ajax đc trong laravel
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         function deleteComment(id) {
             confirmDeleteComment = confirm("Bạn có chắc muốn xóa không")
             if (!confirmDeleteComment) {

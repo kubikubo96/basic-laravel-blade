@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <base href="{{asset('')}}" />
+    <!-- Base asset -->
+    <base href="{{asset('')}}"/>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -13,29 +16,24 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-    <script src="js/file.js"></script>
-
-    @yield('script')
-
-    {{--    Tự tạo khi làm--}}
+    <link rel="stylesheet" href=" {{asset('css/style.css')}} " type="text/css"/>
+    @yield('css')
+    <!-- Using file boostrap.js from mix -->
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/file.js') }}"></script>
     <title>Cafebiz</title>
 </head>
 
 <body>
-    <div class="wapper" style="">
-        @include('layouts.header')
-        @include('layouts.advertise.advertise_top')
-        <!-- page content -->
+<div class="wapper">
 
-        @yield('content')
+    @include('layouts.header')
+    @include('layouts.advertise.advertise_top')`
+    @yield('content')
+    @include('layouts.advertise.advertise_bottom')
 
-        <!-- end_page_content -->
-
-        @include('layouts.advertise.advertise_bottom')
-
-        @include('layouts.footer')
-    </div>
+    @include('layouts.footer')
+</div>
 </body>
 
 @yield('script')
