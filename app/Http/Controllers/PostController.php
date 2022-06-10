@@ -6,6 +6,7 @@ use App\Http\Requests\Postrequests\PostAddRequest;
 use App\Http\Requests\Postrequests\PostEditRequest;
 use App\Jobs\ElasticSearchJob;
 use App\Library\CGlobal;
+use App\Notifications\PostChangeNotification;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,15 +43,20 @@ class PostController extends Controller
             return $this->postAddRequest->rules($request);
         }
         $data = $this->postRepository->create_post($request);
+
         /*
          *@todo elasticsearch
          * if($data) {
         ElasticSearchJob::dispatch($data->id, CGlobal::ELASTIC_CREATE);
         }*/
 
-        $post = $this->postRepository->getAll();
+        /**
+         * Make notification create post
+         */
+        $user = Auth::user();
+        $user->notify(new PostChangeNotification('Notify create post ' . $data->title));
 
-        //compact : Truyền dữ liệu ra View
+        $post = $this->postRepository->getAll();
         return view('admin.posts.row_post', compact('post'));
     }
 
