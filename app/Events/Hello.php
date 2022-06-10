@@ -14,6 +14,7 @@ class Hello implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    const message = 'Hello there';
     /**
      * Create a new event instance.
      *
@@ -27,7 +28,7 @@ class Hello implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'hello' => 'there'
+            'hello' => self::message
         ];
     }
 
@@ -39,5 +40,15 @@ class Hello implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('channel');
+    }
+
+    /**
+     * Determine if this event should broadcast.
+     *
+     * @return bool
+     */
+    public function broadcastWhen()
+    {
+        return strlen(self::message) < 100;
     }
 }
