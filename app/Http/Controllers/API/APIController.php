@@ -21,14 +21,7 @@ class APIController extends Controller
     {
         try {
             $data = $request->all();
-            collect($data)->chunk(20)->map(function ($items) {
-                $items = $items->map(function ($item) {
-                    $item['image_question'] = json_encode($item['image_question']);
-                    $item['option'] = json_encode($item['option']);
-                    return $item;
-                })->toArray();
-                ColearnCrawler::insert($items);
-            });
+            ColearnCrawler::create($data);
             return Response::data();
         } catch (\Exception $e) {
             TelegramService::sendError($e);

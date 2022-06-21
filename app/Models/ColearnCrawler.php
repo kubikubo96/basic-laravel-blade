@@ -11,18 +11,18 @@ class ColearnCrawler extends Model
     protected $appends = ['href'];
 
     protected $fillable = [
-        'name_subject', 'name_topic', 'name', 'tag', 'question', 'image_question', 'image_names', 'option', 'solution', 'answer', 'correct_answer', 'note'
+        'url_question', 'category_id', 'category_name', 'topic_id', 'topic_name', 'topic_parent_name', 'topic_parent_name_no_accents', 'class_id', 'class_name', 'name', 'tag', 'content', 'images', 'new_images', 'option', 'solution', 'answer', 'correct_answer', 'note'
     ];
 
     protected $casts = [
-        'image_question' => 'array',
-        'option' => 'array',
-        'image_names' => 'array',
+        'images' => 'array',
+        'new_images' => 'array',
+        'option' => 'array'
     ];
 
 
     public function getHrefAttribute()
     {
-        return str_replace("https://vungoi.vn/","",$this->url_question);
+        return str_replace("https://vungoi.vn/", "", $this->url_question);
     }
 }
