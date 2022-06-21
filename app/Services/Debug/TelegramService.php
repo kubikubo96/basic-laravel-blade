@@ -8,7 +8,7 @@ class TelegramService
 {
     private static $_url = 'https://api.telegram.org/bot';
     private static $_token = '5331786755:AAGyyeSns6rrcsMPRWr8Za_IFOmxnnwLVLI';
-    private static $_chat_id = '-667596845';
+    private static $_chat_id = '-756405893';
 
     public static function sendMessage($text)
     {
@@ -30,7 +30,7 @@ class TelegramService
         $html = '<b>[Lỗi] : </b><code>' . $exception->getMessage() . '</code>';
         $html .= '<b>[File] : </b><code>' . $exception->getFile() . '</code>';
         $html .= '<b>[Line] : </b><code>' . $exception->getLine() . '</code>';
-        $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
+//        $html .= '<b>[Request] : </b><code>' . json_encode(request()->all()) . '</code>';
         $html .= '<b>[URL] : </b><a href="' . url()->full() . '">' . url()->full() . '</a>';
         self::sendMessage($html);
     }

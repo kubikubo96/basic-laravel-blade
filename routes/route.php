@@ -13,7 +13,10 @@ Route::group(['prefix' => 'webhook'], function () {
 /**
  * crawler
  */
-Route::post('/crawler', 'API\APIController@index');
+Route::get('/crawler/all', 'API\APIController@all');
+Route::post('/crawler/store', 'API\APIController@store');
+Route::post('/crawler/convert', 'API\APIController@convert');
+Route::post('/crawler/update', 'API\APIController@update');
 
 /**
  * Example send event to client listen
